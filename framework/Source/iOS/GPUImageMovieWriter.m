@@ -201,7 +201,6 @@ NSString *const kGPUImageColorSwizzlingFragmentShaderString = SHADER_STRING
         [settings setObject:AVVideoCodecH264 forKey:AVVideoCodecKey];
         [settings setObject:[NSNumber numberWithInt:videoSize.width] forKey:AVVideoWidthKey];
         [settings setObject:[NSNumber numberWithInt:videoSize.height] forKey:AVVideoHeightKey];
-        [settings setObject:[NSNumber numberWithInt:1000000] forKey:AVVideoAverageBitRateKey];
         outputSettings = settings;
     }
     // custom output settings specified
