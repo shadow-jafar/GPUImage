@@ -157,6 +157,13 @@
 
 - (void)createDisplayFramebuffer;
 {
+    __block CALayer *currentLayer;
+    __block CGRect currentRect;
+
+    runOnMainQueueWithoutDeadlocking(^{
+        currentLayer = self.layer;
+        currentRect = self.bounds;
+    });
     [GPUImageContext useImageProcessingContext];
     
     glGenFramebuffers(1, &displayFramebuffer);
@@ -165,7 +172,7 @@
     glGenRenderbuffers(1, &displayRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
     
-    [[[GPUImageContext sharedImageProcessingContext] context] renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
+    [[[GPUImageContext sharedImageProcessingContext] context] renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)currentLayer];
     
     GLint backingWidth, backingHeight;
 
@@ -187,7 +194,7 @@
     
     __unused GLuint framebufferCreationStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     NSAssert(framebufferCreationStatus == GL_FRAMEBUFFER_COMPLETE, @"Failure with display framebuffer generation for display of size: %f, %f", self.bounds.size.width, self.bounds.size.height);
-    boundsSizeAtFrameBufferEpoch = self.bounds.size;
+    boundsSizeAtFrameBufferEpoch = currentRect.size;
 
     [self recalculateViewGeometry];
 }
